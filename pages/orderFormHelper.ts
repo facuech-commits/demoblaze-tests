@@ -19,6 +19,7 @@ export class OrderFormHelper {
     }
   }
 
+
   readonly nameInput: Locator;
   readonly countryInput: Locator;
   readonly cityInput: Locator;

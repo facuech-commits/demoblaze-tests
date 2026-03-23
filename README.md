@@ -1,3 +1,6 @@
+# demoblaze-tests
+Automated tests for DemoBlaze using Playwright
+
 # Demoblaze Playwright Automation
 
 ## Project Overview
