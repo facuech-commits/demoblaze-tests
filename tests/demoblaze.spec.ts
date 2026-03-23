@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import { homePageLocators } from '../pages/homePageLocators';
 import { LoginPage } from '../pages/login';
 import { credentials } from '../constants/testData';
-import { ProductLocators } from '../pages/productlocators';
+import { ProductLocators } from '../pages/productInformation';
 
 test.describe('Demoblaze Tests', () => {
   test('login_flow', async ({ page }) => {
