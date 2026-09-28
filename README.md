@@ -63,6 +63,28 @@ constants/testData.ts Demo account and API URL
 - Cart add / view / delete round trip.
 - Catalog entries have the required fields.
 
+## Findings
+
+What testing the live site revealed, and how the suite handles each case.
+
+### Bugs in the site under test
+
+| Finding | Cause | How the suite handles it |
+|---|---|---|
+| The purchase confirmation shows the wrong date (27 Sep shows as `27/8`). | The site builds the date with JavaScript's 0-based `getMonth()`. | The date is not asserted; the bug is documented in `purchase.spec.ts`. |
+| After a purchase, OK does not always return to the home page; about 1 in 3 times the page stays on the cart. | The redirect in the confirmation callback is unreliable. | The test reopens the cart by URL and verifies through the `/viewcart` response that it is empty. |
+| "Previous" in the catalog pagination returns a different first page than the initial load (Samsung galaxy s6 is missing). | The `/pagination` endpoint does not match `/entries`. | Not covered yet. A pagination test must compare against the `/pagination` response, not against the first load. |
+
+### Testing challenges
+
+| Finding | Cause | Solution |
+|---|---|---|
+| Cart tests passed or failed depending on the day. | The demo account (`asd`) is public: anyone can add items to its cart at any time. | Cart and purchase tests use a guest cart, or a newly created user, that belongs only to that test. |
+| Opening the cart page directly showed other people's products. | The cookie that identifies a guest cart is set only when the home page loads. | Every test loads the home page first. |
+| The "Product added" confirmation appears outside the page. | It is a native `window.alert`, not an HTML modal. | Handled with `page.waitForEvent('dialog')`. The message also differs by state: `Product added` as a guest, `Product added.` when logged in. |
+| Waiting for the form validation alert froze the test. | That alert fires synchronously inside the click, so the click never finishes until the alert is handled. | The listener is registered with `page.once('dialog')` before the click and accepts the alert itself. |
+| The API reports success even when an operation fails. | Demoblaze returns HTTP 200 with an `errorMessage` in the body (wrong password, duplicate user, item not found). | API tests assert on the body, and check that an item really exists before testing its deletion. |
+
 ## AI-assisted coverage workflow (Claude Code)
 The repo includes a Claude Code skill, `cover-feature-with-tests` (in `.claude/`), that adds coverage in three steps. Each step is handled by a separate agent:
 1. **Plan**: a read-only agent explores the live site and the current suite, then proposes up to 6 coverage gaps mapped to their spec and page object.
