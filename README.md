@@ -63,25 +63,7 @@ constants/testData.ts Demo account and API URL
 - Cart add / view / delete round trip.
 - Catalog entries have the required fields.
 
-## Problems, Errors, or Blockers
-I encountered some issues, for example with the confirmation modal when adding an item to the cart, as the modal appeared outside the platform. I used Copilot to help handle this situation.
-I also needed help generating random suffixes to fill values in the purchase information modal. Although I have done similar actions before, it can be cumbersome to declare these values manually.
-Since some locators on this page are not very robust, certain things became complicated. For example, when adding toBeVisible assertions to verify that an item is in the cart, I could not implement them because if there was another item with the same name, it was not validated correctly.
-
-**How they were solved later:**
-- The "modal outside the platform" is a native `window.alert`. It is handled with `page.waitForEvent('dialog')`, or with `page.once('dialog')` when the alert fires synchronously inside the click.
-- Duplicate items came from the public demo account, whose cart anyone can change. Cart and purchase tests now use a guest cart, or a newly created user, that belongs only to that test.
-- Known site bugs are documented in the tests instead of hidden: the confirmation date uses a 0-based month, and the OK button does not always redirect.
-
-## AI Usage
-GitHub Copilot (GPT-4.1) was used to:
-   - Suggest POM best practices for Playwright assertions and test structure.
-   - Refactor and aggregate assertions in page object methods.
-   - Draft this README and summarize test case justifications.
-   - When accessing a page, I provided all the locators I saw at once, so I didn't have to declare them one by one, which saved time.
-All code and documentation were reviewed and validated manually with the debug
-
-### AI-assisted coverage workflow (Claude Code)
+## AI-assisted coverage workflow (Claude Code)
 The repo includes a Claude Code skill, `cover-feature-with-tests` (in `.claude/`), that adds coverage in three steps. Each step is handled by a separate agent:
 1. **Plan**: a read-only agent explores the live site and the current suite, then proposes up to 6 coverage gaps mapped to their spec and page object.
 2. **Approve**: a human picks which gaps to implement.
