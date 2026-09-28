@@ -1,9 +1,15 @@
 {
   "name": "demoblaze-tests",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {},
+  "description": "Playwright + TypeScript test suite for the Demoblaze demo store (UI, end-to-end and API tests)",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test --grep @e2e",
+    "test:api": "playwright test tests/api.spec.ts",
+    "report": "playwright show-report",
+    "format": "prettier --write tests pages utils constants",
+    "format:check": "prettier --check tests pages utils constants"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
